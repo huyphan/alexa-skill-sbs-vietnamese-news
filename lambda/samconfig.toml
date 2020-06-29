@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sbs-vietnamese-news"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-dvbuo885260m"
+s3_prefix = "sbs-vietnamese-news"
+region = "us-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

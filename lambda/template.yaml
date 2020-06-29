@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sbs_vietnamese_news_lambda
+
+  Sample SAM Template for sbs_vietnamese_news_lambda
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  SbsVietnameseNewsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: sbs_vietnamese_news/
+      Handler: main.lambda_handler
+      Runtime: python3.8
+      Events:
+        AlexaSkillEvent:
+          Type: AlexaSkill
+          Properties:
+            SkillId: "amzn1.ask.skill.540237d1-1d71-42bc-80cf-3d773a767ce0"
+
+Outputs:
+  SbsVietnameseNewsFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt SbsVietnameseNewsFunction.Arn
+  SbsVietnameseNewsFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt SbsVietnameseNewsFunctionRole.Arn
