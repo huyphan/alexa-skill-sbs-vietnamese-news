@@ -353,8 +353,8 @@ sb.add_request_handler(LaunchRequestOrPlayAudioHandler())
 sb.add_request_handler(PlaybackStartedHandler())
 sb.add_request_handler(PlaybackFinishedHandler())
 sb.add_request_handler(PlaybackStoppedHandler())
-sb.add_request_handler(PlaybackNearlyFinishedHandler())
-sb.add_request_handler(PlaybackFailedHandler())
+# sb.add_request_handler(PlaybackNearlyFinishedHandler())
+# sb.add_request_handler(PlaybackFailedHandler())
 
 # Exception handlers
 sb.add_exception_handler(CatchAllExceptionHandler())
