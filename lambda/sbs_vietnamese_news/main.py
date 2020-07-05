@@ -157,11 +157,7 @@ class PlaybackNearlyFinishedHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         logger.info("In PlaybackNearlyFinishedHandler")
         logger.info("Playback nearly finished")
-        request = handler_input.request_envelope.request
-        return util.play_later(
-            url=util.audio_data(request)["url"],
-            card_data=util.audio_data(request)["card"],
-            response_builder=handler_input.response_builder)
+        return handler_input.response_builder.response
 
 
 class PlaybackFailedHandler(AbstractRequestHandler):
@@ -178,8 +174,14 @@ class PlaybackFailedHandler(AbstractRequestHandler):
         logger.info("In PlaybackFailedHandler")
         request = handler_input.request_envelope.request
         logger.info("Playback failed: {}".format(request.error))
+
+        URL = "https://www.sbs.com.au/guide/ajax_radio_program_catchup_data/language/vietnamese"
+        response = requests.get(URL)
+        content = response.json()
+        today_program = content[0]
+
         return util.play(
-            url=util.audio_data(request)["url"], offset=0, text=None,
+            url=today_program['archiveAudio']['mp3'], offset=0, text=None,
             card_data=None,
             response_builder=handler_input.response_builder)
 
@@ -267,7 +269,7 @@ class PauseCommandHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_request_type("PlaybackController.PauseCommandIssued")(
-            handler_input)
+            handler_input) or is_intent_name("AMAZON.PauseIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -353,8 +355,10 @@ sb.add_request_handler(LaunchRequestOrPlayAudioHandler())
 sb.add_request_handler(PlaybackStartedHandler())
 sb.add_request_handler(PlaybackFinishedHandler())
 sb.add_request_handler(PlaybackStoppedHandler())
-# sb.add_request_handler(PlaybackNearlyFinishedHandler())
-# sb.add_request_handler(PlaybackFailedHandler())
+sb.add_request_handler(PlaybackNearlyFinishedHandler())
+sb.add_request_handler(PlaybackFailedHandler())
+sb.add_request_handler(PauseCommandHandler())
+
 
 # Exception handlers
 sb.add_exception_handler(CatchAllExceptionHandler())
